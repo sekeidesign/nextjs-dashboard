@@ -1,3 +1,8 @@
+'use client';
+
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import clsx from 'clsx';
 import {
   UserGroupIcon,
   HomeIcon,
@@ -17,19 +22,38 @@ const links = [
 ];
 
 export default function NavLinks() {
+  const pathname = usePathname();
   return (
     <>
       {links.map((link) => {
         const LinkIcon = link.icon;
         return (
-          <a
+          <Link
             key={link.name}
             href={link.href}
-            className="flex h-[48px] grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600 md:flex-none md:justify-start md:p-2 md:px-3"
+            className={clsx(
+              'flex h-[48px] grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium  md:flex-none md:justify-start md:p-2 md:px-3',
+              {
+                'cursor-default bg-blue-400 hover:bg-blue-400':
+                  pathname === link.href,
+                'cursor-pointer hover:bg-sky-100 hover:text-blue-600':
+                  pathname !== link.href,
+              },
+            )}
           >
-            <LinkIcon className="w-6" />
-            <p className="hidden md:block">{link.name}</p>
-          </a>
+            <LinkIcon
+              className={clsx('w-6', {
+                'text-white': pathname === link.href,
+              })}
+            />
+            <p
+              className={clsx('hidden md:block', {
+                'text-white': pathname === link.href,
+              })}
+            >
+              {link.name}
+            </p>
+          </Link>
         );
       })}
     </>
